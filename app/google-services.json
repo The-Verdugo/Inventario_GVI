@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "411035948769",
+    "firebase_url": "https://inventario-gvi-default-rtdb.firebaseio.com",
+    "project_id": "inventario-gvi",
+    "storage_bucket": "inventario-gvi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411035948769:android:9491ad80c11433d9c4c9a0",
+        "android_client_info": {
+          "package_name": "com.grupoventa.inventario_gvi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPte9EpdnMMXaVg_vT9o6Hv68Xy5nqRSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
