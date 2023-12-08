@@ -1,21 +1,17 @@
 package com.grupoventa.inventario_gvi.clases
 
-import android.os.Handler
-import android.os.Looper
-import androidx.recyclerview.widget.DiffUtil.ItemCallback
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.grupoventa.inventario_gvi.data.models.ItemSAP
+import com.grupoventa.inventario_gvi.data.model.ItemSAP
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
-class Validaciones {
+class Validaciones @Inject constructor(){
     // Construir la ruta del nodo en Firebase
     private val nodePath = "/Inventarios/${obtenerFechaActual()}/inventario_inicial"
 
@@ -39,7 +35,7 @@ class Validaciones {
                             val objDto = childSnapshot.getValue(ItemSAP::class.java)
 
                             // Verificar la coincidencia del campo DistNumber (Lote)
-                            if (objDto?.DistNumber == Lote) {
+                            if (objDto?.DistNumber?.substringBefore('@')?.trim() == Lote) {
                                 callback(true, objDto)
                                 return // Terminar la función ya que encontramos una coincidencia
                             }
@@ -136,6 +132,7 @@ class Validaciones {
         cantidad: Int,
         data: ItemSAP,
         idUser: String,
+        userName:String,
         onComplete: (exitoso: Boolean, mensaje: String) -> Unit
     ) {
         // Obtener la fecha actual con el formato dd_MM_yyyy
@@ -171,6 +168,7 @@ class Validaciones {
                                     "WhsCode" to data.WhsCode,
                                     "cantidad" to cantidad,
                                     "idUser" to idUser,
+                                    "userName" to userName,
                                     "itemCode" to data.ItemCode,
                                     "itemName" to data.itemName
                                 )
@@ -219,6 +217,7 @@ class Validaciones {
         cantidad: Int,
         data: ItemSAP,
         idUser: String,
+        userName:String,
         onComplete: (exitoso: Boolean, mensaje: String) -> Unit
     ) {
         // Obtener la fecha actual con el formato dd_MM_yyyy
@@ -233,7 +232,7 @@ class Validaciones {
 
                 // Crear un objeto para almacenar los datos del conteo
                 val conteoData = hashMapOf(
-                    "DistNumber" to data.DistNumber,
+                    "DistNumber" to "",
                     "FirmName" to data.FirmName,
                     "ItmsGrpNam" to data.ItmsGrpNam,
                     "U_CATEGORIA" to data.U_CATEGORIA,
@@ -241,6 +240,7 @@ class Validaciones {
                     "WhsCode" to data.WhsCode,
                     "cantidad" to cantidad,
                     "idUser" to idUser,
+                    "userName" to userName,
                     "itemCode" to data.ItemCode,
                     "itemName" to data.itemName
                 )
@@ -273,6 +273,69 @@ class Validaciones {
             }
         })
     }
+
+
+    fun registrarConteoSKULOT(
+        cantidad: Int,
+        data: ItemSAP,
+        idUser: String,
+        userName: String,
+        onComplete: (exitoso: Boolean, mensaje: String) -> Unit
+    ) {
+        // Obtener la fecha actual con el formato dd_MM_yyyy
+        val fechaActual = obtenerFechaActual()
+
+        val pathConteo ="Inventarios/$fechaActual/conteo"
+        val reference = database.getReference(pathConteo)
+        // Obtener el valor actual de num_conteo
+        reference.child("num_conteo").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val numConteoActual = snapshot.getValue(Int::class.java) ?: 1
+
+                // Crear un objeto para almacenar los datos del conteo
+                val conteoData = hashMapOf(
+                    "DistNumber" to data.DistNumber,
+                    "FirmName" to data.FirmName,
+                    "ItmsGrpNam" to data.ItmsGrpNam,
+                    "U_CATEGORIA" to data.U_CATEGORIA,
+                    "Ubicacion" to "", // Reemplazar por el campo correcto
+                    "WhsCode" to data.WhsCode,
+                    "cantidad" to cantidad,
+                    "idUser" to idUser,
+                    "userName" to userName,
+                    "itemCode" to data.ItemCode,
+                    "itemName" to data.itemName
+                )
+
+                // Registrar el conteo en la base de datos
+                reference.child(numConteoActual.toString()).push()
+                    .setValue(conteoData)
+                    .addOnSuccessListener {
+                        // Operación exitosa
+                        onComplete(
+                            true,
+                            "Item registrado exitosamente"
+                        )
+                    }
+                    .addOnFailureListener {
+                        // Error al registrar
+                        onComplete(
+                            false,
+                            "Error al registrar el conteo: ${it.message}"
+                        )
+                    }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Manejar errores
+                onComplete(
+                    false,
+                    "Error al obtener el valor de num_conteo: ${error.message}"
+                )
+            }
+        })
+    }
+
 
     fun resetUbi(IdUser: String, onComplete: (success: Boolean, message: String) -> Unit) {
         // Obtener la fecha actual con el formato dd_MM_yyyy

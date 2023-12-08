@@ -5,8 +5,10 @@ import android.media.MediaPlayer
 import android.os.VibrationEffect
 import android.os.Vibrator
 import com.grupoventa.inventario_gvi.R
+import es.dmoral.toasty.Toasty
+import javax.inject.Inject
 
-class sounds {
+class sounds @Inject constructor(){
 
     fun PlaySoundSuccess(context: Context){
         val mediaPlayer = MediaPlayer.create(context, R.raw.beep)
@@ -14,6 +16,8 @@ class sounds {
             it.release()
         }
         mediaPlayer.start()
+
+        Toasty.success(context,"Item Registrado",Toasty.LENGTH_SHORT,true).show()
     }
     fun PlaySoundConfirm(context: Context){
         val mediaPlayer = MediaPlayer.create(context, R.raw.success)
@@ -31,6 +35,7 @@ class sounds {
         mediaPlayer.start()
         // Vibrar cuando se produce un error
         vibrate(context)
+        Toasty.warning(context,"El artículo no se encontró en el inventario actual",Toasty.LENGTH_SHORT,true).show()
     }
 
     private fun vibrate(context: Context) {

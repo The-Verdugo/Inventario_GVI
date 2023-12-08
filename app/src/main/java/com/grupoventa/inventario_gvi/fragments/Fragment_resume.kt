@@ -1,4 +1,4 @@
-package com.grupoventa.inventario_gvi.views.fragments
+package com.grupoventa.inventario_gvi.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

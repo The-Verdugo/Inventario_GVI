@@ -1,8 +1,8 @@
-package com.grupoventa.inventario_gvi.data.models
+package com.grupoventa.inventario_gvi.data.model
 
 data class ItemSAP (
-    val CodeBars:String,
-    val DistNumber: String,
+    val CodeBars:String? = null,
+    var DistNumber: String,
     val FirmName: String,
     val ItemCode: String,
     val ItmsGrpNam: String,

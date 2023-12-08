@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".views.fragments.Fragment_home">
+    tools:context=".fragments.Fragment_home">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:focusable="false"
+        android:focusableInTouchMode="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,13 +55,19 @@
                 android:textStyle="bold" />
         </LinearLayout>
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedFocus"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:descendantFocusability="blocksDescendants">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:focusableInTouchMode="false"
+                android:focusable="false">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -243,6 +251,7 @@
                             android:layout_marginEnd="10dp"
                             android:background="?android:attr/selectableItemBackground"
                             android:contentDescription="Ubicación"
+                            android:descendantFocusability="blocksDescendants"
                             android:padding="8dp"
                             android:src="@drawable/baseline_restart_alt_24"
                             app:tint="#FF9800" />

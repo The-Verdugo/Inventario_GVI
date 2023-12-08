@@ -1,4 +1,4 @@
-package com.grupoventa.inventario_gvi.views.fragments
+package com.grupoventa.inventario_gvi.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.grupoventa.inventario_gvi.R
-import com.grupoventa.inventario_gvi.views.ui.Login
+import com.grupoventa.inventario_gvi.ui.view.Login
 
 
 class Fragment_settings : Fragment() {
